@@ -54,12 +54,15 @@ async def processing(message: types.Message, state=FSMContext): # состоян
     answer = random.randint(first_diap, second_diap) # генерируем рандомное число из чисел заданных пользователем
     await message.answer(text=f'*{str(answer)}*', parse_mode= 'Markdown') # отправляем пользователю число
     print('going')
-    for i in range(message_time * 5):
-        t.sleep(0.2) # пауза 0.2 секунды
-        answer = random.randint(first_diap, second_diap) # снова генерируем число
-        await bot.edit_message_text(chat_id=message.chat.id, message_id=message.message_id + 1, text=f'*{str(answer)}*', parse_mode= 'Markdown') # меняем старое число на новое
-    print('succesfull')
-    await bot.send_message(chat_id=message.chat.id, text='Готово!') # по окончанию цикла отправляем пользователю сообщение
+    if (second_diap - first_diap) > 10000:
+        for i in range(message_time * 5):
+            t.sleep(0.2) # пауза 0.2 секунды
+            answer = random.randint(first_diap, second_diap) # снова генерируем число
+            await bot.edit_message_text(chat_id=message.chat.id, message_id=message.message_id + 1, text=f'*{str(answer)}*', parse_mode= 'Markdown') # меняем старое число на новое
+        print('succesfull')
+        await bot.send_message(chat_id=message.chat.id, text='Готово!')
+    else:
+        await bot.send_message(chat_id=message.chat.id, text='Готово!') # по окончанию цикла отправляем пользователю сообщение
     await state.reset_state() # удаляем состояние
 
 executor.start_polling(dp)
