@@ -32,7 +32,7 @@ async def instruction(message: types.Message):
 @dp.message_handler(commands=['random']) # фильтр на комманду /random
 async def diap(message: types.Message):
     await message.answer('Введи диапозон от a до b от меньшего к большему.\nВ формате: a b')
-    print(message.text)
+    print('start')
     await state_func.diap.set()  # установка состояния
 
 
@@ -53,10 +53,12 @@ async def processing(message: types.Message, state=FSMContext): # состоян
     second_diap = int(diap_list[1])
     answer = random.randint(first_diap, second_diap) # генерируем рандомное число из чисел заданных пользователем
     await message.answer(text=f'*{str(answer)}*', parse_mode= 'Markdown') # отправляем пользователю число
+    print('going')
     for i in range(message_time * 5):
         t.sleep(0.2) # пауза 0.2 секунды
         answer = random.randint(first_diap, second_diap) # снова генерируем число
         await bot.edit_message_text(chat_id=message.chat.id, message_id=message.message_id + 1, text=f'*{str(answer)}*', parse_mode= 'Markdown') # меняем старое число на новое
+    print('succesfull')
     await bot.send_message(chat_id=message.chat.id, text='Готово!') # по окончанию цикла отправляем пользователю сообщение
     await state.reset_state() # удаляем состояние
 
