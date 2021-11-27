@@ -3,9 +3,9 @@ from aiogram.dispatcher import FSMContext # для работы с стосто�
 from aiogram.dispatcher.filters.state import State, StatesGroup # импортируем машину состояний
 from aiogram.utils import executor
 from aiogram.contrib.fsm_storage.memory import MemoryStorage # импортируем хранилище
-import time
+import time as t
 import random
-from environs import Env # библиотека для импортирования токена бота из .env
+from environs import Env # библиотека для работы с окружением бота из .env
 
 env = Env()
 env.read_env()   # чтение .env
@@ -54,7 +54,7 @@ async def processing(message: types.Message, state=FSMContext): # состоян
     answer = random.randint(first_diap, second_diap) # генерируем рандомное число из чисел заданных пользователем
     await message.answer(text=f'*{str(answer)}*', parse_mode= 'Markdown') # отправляем пользователю число
     for i in range(message_time * 5):
-        time.sleep(0.2) # пауза 0.2 секунды
+        t.sleep(0.2) # пауза 0.2 секунды
         answer = random.randint(first_diap, second_diap) # снова генерируем число
         await bot.edit_message_text(chat_id=message.chat.id, message_id=message.message_id + 1, text=f'*{str(answer)}*', parse_mode= 'Markdown') # меняем старое число на новое
     await bot.send_message(chat_id=message.chat.id, text='Готово!') # по окончанию цикла отправляем пользователю сообщение
