@@ -23,16 +23,15 @@ class state_func(StatesGroup): # Машина состояний
 @dp.message_handler(commands=['start']) # фильтр на комманду /start
 async def start_func(message: types.Message):
     chat_id = message.chat.id
-    await bot.send_message(chat_id=chat_id, text='Привет.\nНапиши /help, чтобы узнать поглучить инструкции!')
+    await bot.send_message(chat_id=chat_id, text='Привет.\nНапиши /help, чтобы узнать поглучить инструкции!\nСразу скажу, ТОЛЬКО ПОЛОЖИТЕЛЬНЫЕ ЧИСЛА!!! ')
 
 @dp.message_handler(commands=['help']) # фильтр на комманду /help
 async def instruction(message: types.Message):
-    await message.answer('Короче, просто рандомайзер. Сейчас надо будет ввести /random и выбрать диапозон и время генерации) ')
+    await message.answer('Короче, просто рандомайзер. Сейчас надо будет ввести /random и выбрать диапозон и время генерации.\nИСПОЛЬЗОВАТЬ ТОЛЬКО ПОЛОЖИТЕЛЬНЫЕ ЧИСЛА!!! ')
 
 @dp.message_handler(commands=['random']) # фильтр на комманду /random
 async def diap(message: types.Message):
     await message.answer('Введи диапозон от a до b от меньшего к большему.\nВ формате: a b')
-    print('start')
     await state_func.diap.set()  # установка состояния
 
 
@@ -53,13 +52,11 @@ async def processing(message: types.Message, state=FSMContext): # состоян
     second_diap = int(diap_list[1])
     answer = random.randint(first_diap, second_diap) # генерируем рандомное число из чисел заданных пользователем
     await message.answer(text=f'*{str(answer)}*', parse_mode= 'Markdown') # отправляем пользователю число
-    print('going')
     if (second_diap - first_diap) > 10000:
         for i in range(message_time * 5):
             t.sleep(0.2) # пауза 0.2 секунды
             answer = random.randint(first_diap, second_diap) # снова генерируем число
             await bot.edit_message_text(chat_id=message.chat.id, message_id=message.message_id + 1, text=f'*{str(answer)}*', parse_mode= 'Markdown') # меняем старое число на новое
-        print('succesfull')
         await bot.send_message(chat_id=message.chat.id, text='Готово!')
     else:
         await bot.send_message(chat_id=message.chat.id, text='Готово!') # по окончанию цикла отправляем пользователю сообщение
